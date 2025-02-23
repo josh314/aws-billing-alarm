@@ -1,14 +1,27 @@
-# Welcome to your CDK TypeScript project
+# AWS Billing Alarm
 
-This is a blank project for CDK development with TypeScript.
+This project configures a simple estimated charges billing alarm for an AWS account. Run this for any new account to create a basic guardrail against surprise bills.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Prerequisites
 
-## Useful commands
+Must first manually enable billing alerts in the AWS console. This is a one-time setup.
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+  - Go to the AWS Billing Dashboard.
+  - In the left navigation pane, select Billing Preferences.
+  - Check the box for Receive Billing Alerts and save the settings.
+
+## Environment Variables
+
+Expects the following environment variables:
+
+- `BILLING_ALARM_THRESHOLD` - the estimated charges threshold that will trigger the alarm
+- `BILLING_ALARM_EMAIL` - the email address to send the alarm to
+
+Can be included in a `.env` file in the root of the project.
+
+## What it does
+
+- Creates an SNS billing topic
+- adds an email subscription to the topic
+- creates a billing alarm that triggers when estimated charges exceed the input value
+- adds the necessary permission to CloudWatch to public to the SNS topic

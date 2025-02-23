@@ -2,8 +2,17 @@
 import * as cdk from 'aws-cdk-lib';
 import { BillingAlarmStack } from '../lib/billing-alarm-stack';
 
+import 'dotenv/config';
+
+if( !process.env.BILLING_ALARM_EMAIL || !process.env.BILLING_ALARM_THRESHOLD ) {
+  console.error('Please provide BILLING_ALARM_EMAIL and BILLING_ALARM_THRESHOLD in .env file');
+  process.exit(1);
+}
+
 const app = new cdk.App();
 new BillingAlarmStack(app, 'BillingAlarmStack', {
+  email: process.env.BILLING_ALARM_EMAIL!,
+  threshold: Number(process.env.BILLING_ALARM_THRESHOLD!),
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
