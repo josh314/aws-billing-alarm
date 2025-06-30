@@ -1,5 +1,7 @@
 # AWS Billing Alarm
 
+**IMPORTANT: AWS requires that the email to be notified must opt-in to receiving alerts. After deploying this stack, don't forget to check the notification email and confirm the subscription!**
+
 This project configures a simple estimated charges billing alarm for an AWS account. Run this for any new account to create a basic guardrail against surprise bills.
 
 ## Prerequisites
@@ -8,7 +10,9 @@ Must first manually enable billing alerts in the AWS console. This is a one-time
 
   - Go to the AWS Billing Dashboard.
   - In the left navigation pane, select Billing Preferences.
-  - Check the box for Receive Billing Alerts and save the settings.
+  - Check the box for Receive Cloudwatch Billing Alerts and save the settings.
+
+You may also need to allow access to Billing for IAM users in the account settings, unless you are using the root account to run this script (which you shouldn't!)
 
 ## Environment Variables
 
@@ -24,4 +28,4 @@ Can be included in a `.env` file in the root of the project.
 - Creates an SNS billing topic
 - adds an email subscription to the topic
 - creates a billing alarm that triggers when estimated charges exceed the input value
-- adds the necessary permission to CloudWatch to public to the SNS topic
+- adds the necessary permission to CloudWatch to publish to the SNS topic
