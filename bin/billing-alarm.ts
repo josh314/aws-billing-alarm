@@ -9,21 +9,15 @@ if( !process.env.BILLING_ALARM_EMAIL || !process.env.BILLING_ALARM_THRESHOLD ) {
   process.exit(1);
 }
 
+const stackName = process.env.BILLING_ALARM_LINKED_ACCOUNT_ID
+  ? `BillingAlarmStack-${process.env.BILLING_ALARM_LINKED_ACCOUNT_ID}`
+  : 'BillingAlarmStack';
+
 const app = new cdk.App();
 new BillingAlarmStack(app, 'BillingAlarmStack', {
+  stackName,
   email: process.env.BILLING_ALARM_EMAIL!,
   threshold: Number(process.env.BILLING_ALARM_THRESHOLD!),
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
-
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
-
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
-
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+  linkedAccountId: process.env.BILLING_ALARM_LINKED_ACCOUNT_ID, // Optional, for cross-account billing such as with AWS Organizations
+  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION }, // you may wish to modify these values for your usage.
 });
